@@ -1,0 +1,16 @@
+SMEDecode reduced functional test
+release_commit=08074c34af9dabbf92de750fe149c045b72d3218
+started=2026-11-18T19:03:46+08:00
+host_platform=Linux x86_64 (WSL)
+emulator=qemu-aarch64 version 8.2.2 (Debian 1:8.2.2+ds-0ubuntu1.16)
+mode=emulated Arm SME with 512-bit streaming vectors
+command=python3 smoke_test.py
+configuration_grid=L 2048; N 3 or 5; R 1 or 2
+exit_code=0
+
+[stdout]
+{"status":"FORMAL_COMPARE_PROCESS_ACCEPTED","baseline_software_instrumentation":"disabled_for_formal_timing","gate_identity":"uninstrumented_numeric_hash_page_gate","process":0,"mode":"emulated","main_samples":16}
+SMEDecode and SMEAtten passed the four reduced cases and FP64 reference checks.
+
+[stderr]
+(empty)
