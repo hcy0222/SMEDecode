@@ -1,6 +1,6 @@
 # SMEDecode experiment data
 
-[SMEDecode_results.xlsx](SMEDecode_results.xlsx) contains per-run and aggregate results for the experiments reported in the SMEDecode manuscript.
+[SMEDecode_results.xlsx](SMEDecode_results.xlsx) contains aggregate results for the experiments reported in the SMEDecode manuscript.
 
 ## Worksheets
 
@@ -16,25 +16,6 @@
 | `Precision_Validation` | Precision and shape validation | The 32 reported FP32 and BF16 correctness configurations and their error summaries. |
 | `Exponent_Control` | Performance-comparison text | Original and common exponential functions at L = 2048 or 10240, N = 296 and R = 256. |
 
-## Result sets
-
-`result_set` identifies `Run 1`, `Run 2` or `Aggregate`. A run record contains the configuration-level statistic from that independent measurement. `Aggregate` contains the statistic used in the manuscript. Single-run experiments have matching `Run 1` and `Aggregate` records.
-
-| Experiment | Independent runs |
-|---|---:|
-| MeAtten comparison | 2 |
-| SMEAtten comparison | 2 |
-| ACL comparison | 2 |
-| XNNPACK fused comparison | 1 |
-| XNNPACK nonfused comparison | 1 |
-| Cumulative ablation | 2 |
-| Core scaling and the reported scaling controls | 2 |
-| Instruction counts | 1 |
-| Representative shapes | 2 |
-| Key-block sensitivity | 2 |
-| Precision validation | 1 |
-| Exponential-function control | 1 |
-
 ## Fields and units
 
 `L` is the number of keys. `N` is the task count. `R` is the number of decoding calls after each preparation. `Hq` and `Hkv` are the query-head and KV-head counts. `d` is the head dimension. `workers` is the number of worker threads.
@@ -47,7 +28,7 @@ Throughput is in GFLOP/s. It is calculated as:
 GFLOP/s = 4 * N * R * Hq * L * d / (T_ms * 1,000,000)
 ```
 
-`T_speedup` is paired baseline total time divided by SMEDecode total time. `T_speedup_vs_37` is total time at 37 workers divided by total time at the row's worker count, for the same method, configuration and result set.
+`T_speedup` is paired baseline total time divided by SMEDecode total time. `T_speedup_vs_37` is total time at 37 workers divided by total time at the row's worker count, for the same method and configuration.
 
 Reduction, change and relative-time columns store numeric ratios and use percentage display formatting:
 
@@ -68,10 +49,10 @@ ACL absolute times use paired arithmetic means. Its reduction columns retain the
 
 Cumulative ablation uses arithmetic averaging of process medians and independent runs. Throughput and step changes are calculated from those times. The states are `Base`, `K_layout`, `K_V_layout` and `Full`. They represent the base implementation, the key-segment layout, the additional V grouping, and the complete implementation with domain-based preparation and per-worker notification.
 
-Core scaling uses the per-run median of the ordinary timing samples, followed by equal geometric aggregation of the independent runs. Scaling-control times retain the reported geometric aggregation. Register-compute throughput uses each run's median compute duration and then geometric aggregation. `NUMA_domains` lists the domains used by that record. `reference_D_ms` and `time_over_reference` identify the matching standard-placement or ordinary-decoding reference.
+Core scaling retains geometric aggregation of the ordinary timing statistics. Scaling-control times and register-compute throughput retain the reported geometric aggregation. `NUMA_domains` lists the domains used by that record. `reference_D_ms` and `time_over_reference` identify the matching standard-placement or ordinary-decoding reference.
 
-Key-block sensitivity retains the original geometric aggregation of per-run statistics and ratios. Instruction counts report one complete prepared decoding call. Retired instructions use the median of three batches, after empty-window correction, with the manuscript's integer rounding also provided. FP32 FMOPA counts are from the executed instruction trace.
+Key-block sensitivity retains the original geometric aggregation of timing statistics and ratios. Instruction counts report one complete prepared decoding call. Retired instructions use the median of three batches, after empty-window correction, with the manuscript's integer rounding also provided. FP32 FMOPA counts are from the executed instruction trace.
 
 Precision errors are the per-configuration maxima from the measured outputs. `semantic_scaled_RMS` uses the precision-specific semantic reference. `ideal_FP64_scaled_RMS` uses the ideal FP64 reference. `absolute_RMS` and `near_zero_absolute_RMS` retain the original absolute-error definitions. The normalization denominator is `max(RMS(reference), 0.01)`. The recorded semantic, ideal BF16 and near-zero thresholds are 1e-4, 0.02 and 1e-6. The validation also contains 22 negative controls, all 22 rejected.
 
-The exponential-function sheet retains the paired original and common-function measurements from the same run. The function-change columns compare common-function decoding time with the matching original-function time.
+The exponential-function sheet retains the paired original and common-function measurements. The function-change columns compare common-function decoding time with the matching original-function time.

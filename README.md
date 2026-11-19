@@ -14,6 +14,6 @@ The script requires four available CPU IDs. On Arm64 it runs the executable dire
 
 ## Experiment data
 
-The [experiment data](data/README.md) include per-run and aggregate results for the configurations reported in the manuscript. The [data workbook](data/SMEDecode_results.xlsx) contains the performance comparisons, six-configuration ablation, core scaling, instruction counts, representative shapes, key-block sensitivity, precision validation and exponential-function control.
+The [experiment data](data/README.md) include aggregate results for the configurations reported in the manuscript. The [data workbook](data/SMEDecode_results.xlsx) contains the performance comparisons, six-configuration ablation, core scaling, instruction counts, representative shapes, key-block sensitivity, precision validation and exponential-function control.
 
 [Third-party notices](THIRD_PARTY_NOTICES.txt)
