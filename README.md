@@ -27,6 +27,8 @@ The file is the executable from the archived main comparison. It supports that c
 
 The ablation release entry points run the six configurations above. Their measurement front ends were restricted to these configurations while retaining the adopted math and adapter objects. The precision entry libraries load their math libraries from the package's `lib/` directory.
 
+Worker placement uses the machine's observed CPU-to-NUMA mapping. The MeAtten, XNNPACK and ACL benchmark drivers were rebuilt to read that mapping; their adopted math and adapter objects were retained.
+
 Implementation source files and build intermediates are not included.
 
 ## Run a functional check
@@ -43,7 +45,7 @@ The script requires four available CPU IDs. On Arm64 it runs the executable dire
 
 `run_experiments.py` prepares the binding inputs and invokes the selected experiment binaries. `test_precision.py` invokes the precision libraries, checks all 32 configurations against FP64 references, and retains its outputs and measurements in the specified directory. Both scripts use the Python standard library.
 
-Run native experiments from the repository root inside a compute-node allocation on the paper's Arm SME server. The programs require SVE/SVE2 and SME with 512-bit vector lengths, 4096-byte base pages, the original CPU/NUMA topology and sufficient memory for the selected workload. BF16 precision tests additionally require the corresponding BF16 instructions. The scheduler provides `CCS_JOB_ID`.
+Run native experiments from the repository root inside a compute-node allocation on the paper's Arm SME server. The programs require SVE/SVE2 and SME with 512-bit vector lengths, 4096-byte base pages, eight allocated NUMA domains with 37 worker CPUs each for the 296-worker experiments, and sufficient memory for the selected workload. BF16 precision tests additionally require the corresponding BF16 instructions. The scheduler provides `CCS_JOB_ID`.
 
 | Selection | Allocated CPUs | Workers |
 |---|---:|---:|

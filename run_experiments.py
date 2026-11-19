@@ -40,11 +40,14 @@ def native_environment():
 
 
 def worker_mapping(cpus):
-    allowed = set(cpus)
-    nodes = [n for n in range(16) if set(range(38*n, 38*n+37)) <= allowed][:8]
+    domains = {}
+    for cpu in cpus:
+        if cpu % 38 != 37:
+            domains.setdefault(cpu_node(cpu), []).append(cpu)
+    nodes = sorted(n for n, members in domains.items() if len(members) >= 37)[:8]
     if len(nodes) != 8:
-        raise RuntimeError('Need eight NUMA domains with the original 37-worker CPU ranges')
-    workers = [(c, n) for n in nodes for c in range(38*n, 38*n+37)]
+        raise RuntimeError('Need eight allocated NUMA domains with 37 worker CPUs each')
+    workers = [(c, n) for n in nodes for c in domains[n][:37]]
     used = {c for c, _ in workers}
     controls = [c for c in cpus if c not in used and c % 38 != 37]
     if not controls:
@@ -177,7 +180,8 @@ def main():
                 field, identity = 'profile_id', 'release_scaling'+('_spread8' if args.spread else '')
                 if args.spread:
                     counts = [args.workers//8+(i < args.workers % 8) for i in range(8)]
-                    workers = [(38*n+j, n) for i, n in enumerate(nodes) for j in range(counts[i])]
+                    domains = {n: [row for row in workers if row[1] == n] for n in nodes}
+                    workers = [row for i, n in enumerate(nodes) for row in domains[n][:counts[i]]]
                 else:
                     workers = workers[:args.workers]
                 env['SCALE_REFERENCE_ROOT'] = str(args.reference_dir.resolve())

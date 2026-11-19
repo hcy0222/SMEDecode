@@ -49,3 +49,28 @@ scaling_reference L2048 task 0: byte-for-byte equality with saved FP64 reference
 scaling_reference L10240 task 0: byte-for-byte equality with saved FP64 reference
 Native attention calls: 0
 Scheduler jobs submitted: 0
+
+NUMA placement checks using saved scheduler topology
+Fixture: /home/share/nsls_ch/hcysme/smedecode_formal_suite_20261119_A01/scheduler/01_standard_topology_cn12033.stdout
+343 allocated CPU fixture: old mapping mismatched 259 workers; corrected mapping matches all 296 workers; scaling placements 37/74/148/296 accepted
+379 allocated CPU fixture: old mapping mismatched 259 workers; corrected mapping matches all 296 workers; scaling placements 37/74/148/296 accepted
+Script argument entries exited 0
+No target attention calls; no scheduler jobs submitted by these checks.
+
+meatten_compile 0
+meatten_link 0
+meatten_usage 2
+meatten_dependencies 0
+xnnpack_fused_compile 0
+xnnpack_fused_link 0
+xnnpack_fused_usage 2
+xnnpack_fused_dependencies 0
+xnnpack_nonfused_compile 0
+xnnpack_nonfused_link 0
+xnnpack_nonfused_usage 2
+xnnpack_nonfused_dependencies 0
+acl_compile 0
+acl_link 0
+acl_usage 2
+acl_dependencies 0
+{"driver_rebuilds": 4, "math_objects_rebuilt": false, "target_calls": 0, "jobs_submitted": 0, "archive": "/home/share/nsls_ch/hcysme/smedecode_formal_suite_20261119_A02/mapping_fix.zip"}
