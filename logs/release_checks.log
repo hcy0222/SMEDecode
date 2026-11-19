@@ -1,0 +1,51 @@
+Local release checks
+Environment: Windows; native kernel execution is not performed here.
+smoke_test.py: Python syntax accepted
+run_experiments.py: Python syntax accepted
+test_precision.py: Python syntax accepted
+run_experiments.py: --help exited 0
+test_precision.py: --help exited 0
+33 binary files: ELF AArch64 headers accepted
+No implementation source, build objects, static-library archives or source packages in release files
+Existing experimental result files: unchanged
+
+AArch64 login-host release checks
+Host: login03
+Purpose: program arguments and runtime loading; no native attention kernel calls.
+bench_aarch64: argument-only entry exit 2
+bin/ablation_base: argument-only entry exit 2
+bin/ablation_full: argument-only entry exit 2
+bin/ablation_k: argument-only entry exit 2
+bin/ablation_kv: argument-only entry exit 2
+bin/acl: argument-only entry exit 2
+bin/common_exp: argument-only entry exit 2
+bin/core_scaling: argument-only entry exit 2
+bin/instructions_acl: argument-only entry exit 11
+bin/instructions_me: argument-only entry exit 11
+bin/instructions_sme: argument-only entry exit 11
+bin/instructions_trace: argument-only entry exit 2
+bin/instructions_xnn_f: argument-only entry exit 11
+bin/instructions_xnn_nf: argument-only entry exit 11
+bin/key_block_16: argument-only entry exit 2
+bin/key_block_256: argument-only entry exit 2
+bin/key_block_32: argument-only entry exit 2
+bin/meatten: argument-only entry exit 2
+bin/original_exp: argument-only entry exit 2
+bin/scaling_reference: argument-only entry exit 2
+bin/shapes_d128: argument-only entry exit 2
+bin/shapes_d64: argument-only entry exit 2
+bin/smedecode_meatten: argument-only entry exit 2
+bin/smedecode_xnnpack_fused: argument-only entry exit 2
+bin/smedecode_xnnpack_nonfused: argument-only entry exit 2
+bin/xnnpack_fused: argument-only entry exit 2
+bin/xnnpack_nonfused: argument-only entry exit 2
+lib/libacl_t11.so: loaded successfully
+lib/precision_d128_target.so: loaded successfully
+lib/precision_d64_target.so: loaded successfully
+lib/precision_math_d128_target.so: loaded successfully
+lib/precision_math_d64_target.so: loaded successfully
+lib/precision_pool.so: loaded successfully
+scaling_reference L2048 task 0: byte-for-byte equality with saved FP64 reference
+scaling_reference L10240 task 0: byte-for-byte equality with saved FP64 reference
+Native attention calls: 0
+Scheduler jobs submitted: 0
