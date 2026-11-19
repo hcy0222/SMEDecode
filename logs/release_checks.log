@@ -74,3 +74,8 @@ acl_link 0
 acl_usage 2
 acl_dependencies 0
 {"driver_rebuilds": 4, "math_objects_rebuilt": false, "target_calls": 0, "jobs_submitted": 0, "archive": "/home/share/nsls_ch/hcysme/smedecode_formal_suite_20261119_A02/mapping_fix.zip"}
+
+Topology-label clarification
+The scheduler-topology fixture above is not a compute-node Linux NUMA observation.
+Job 2179526 on cn19524 observed Linux CPU-to-NUMA membership from sysfs: CPUs 0,38,76,114,152,190,228,266 belong to nodes 0,1,2,3,4,5,6,7 respectively.
+The revised launchers use the observed Linux mapping for actual execution.
