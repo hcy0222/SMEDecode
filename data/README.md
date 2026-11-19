@@ -1,6 +1,6 @@
-# SMEDecode experiment data
+# SMEDecode experimental results
 
-[SMEDecode_results.xlsx](SMEDecode_results.xlsx) contains aggregate results for the experiments reported in the SMEDecode manuscript.
+[SMEDecode_results.xlsx](SMEDecode_results.xlsx) contains the experimental results reported in the SMEDecode manuscript.
 
 ## Worksheets
 
@@ -13,7 +13,7 @@
 | `Instruction_Counts` | Table 3 | FP32 FMOPA and retired instruction counts for the seven reported implementation paths. |
 | `Representative_Shapes` | Table 5 and representative-shape text | The 12 reported head-dimension and KV-group configurations, with paired SMEDecode and SMEAtten measurements. |
 | `Key_Block_Sensitivity` | Experimental setup | The 18 configurations and the 16-, 32- and 256-key SMEAtten blocks. |
-| `Precision_Validation` | Precision and shape validation | The 32 reported FP32 and BF16 correctness configurations and their error summaries. |
+| `Precision_Validation` | Precision and shape validation | The 32 reported FP32 and BF16 correctness configurations and their measured errors. |
 | `Exponent_Control` | Performance-comparison text | Original and common exponential functions at L = 2048 or 10240, N = 296 and R = 256. |
 
 ## Fields and units
@@ -41,17 +41,17 @@ key-block time change = relative key-block time - 1
 
 Blank cells denote fields that do not apply to that record. Numeric precision is retained in the cells; the manuscript displays rounded values.
 
-## Aggregation
+## Calculation methods
 
-For the MeAtten, SMEAtten, XNNPACK and representative-shape comparisons, process-level timing samples are summarized by their median. The original geometric weighting across execution orders and independent runs is retained. XNNPACK's fused and nonfused paths each have their own paired SMEDecode measurements.
+For the MeAtten, SMEAtten, XNNPACK and representative-shape comparisons, process-level timing samples use the median. Statistics across execution orders and independent measurements use the original geometric means. XNNPACK's fused and nonfused paths each have their own paired SMEDecode measurements.
 
 ACL absolute times use paired arithmetic means. Its reduction columns retain the paired log-ratio statistic. `T_speedup` is the ratio of the displayed absolute-time statistics. The reduction columns and absolute-time columns retain their respective calculation methods.
 
-Cumulative ablation uses arithmetic averaging of process medians and independent runs. Throughput and step changes are calculated from those times. The states are `Base`, `K_layout`, `K_V_layout` and `Full`. They represent the base implementation, the key-segment layout, the additional V grouping, and the complete implementation with domain-based preparation and per-worker notification.
+Cumulative ablation uses the arithmetic mean of process medians with equal weighting of independent measurements. Throughput and step changes are calculated from those times. The states are `Base`, `K_layout`, `K_V_layout` and `Full`. They represent the base implementation, the key-segment layout, the additional V grouping, and the complete implementation with domain-based preparation and per-worker notification.
 
-Core scaling retains geometric aggregation of the ordinary timing statistics. Scaling-control times and register-compute throughput retain the reported geometric aggregation. `NUMA_domains` lists the domains used by that record. `reference_D_ms` and `time_over_reference` identify the matching standard-placement or ordinary-decoding reference.
+Core scaling uses the geometric mean of the ordinary timing statistics. Scaling-control times and register-compute throughput use the reported geometric means. `NUMA_domains` lists the domains used by that record. `reference_D_ms` and `time_over_reference` identify the matching standard-placement or ordinary-decoding reference.
 
-Key-block sensitivity retains the original geometric aggregation of timing statistics and ratios. Instruction counts report one complete prepared decoding call. Retired instructions use the median of three batches, after empty-window correction, with the manuscript's integer rounding also provided. FP32 FMOPA counts are from the executed instruction trace.
+Key-block sensitivity retains the original geometric means of timing statistics and ratios. Instruction counts report one complete prepared decoding call. Retired instructions use the median of three batches, after empty-window correction, with the manuscript's integer rounding also provided. FP32 FMOPA counts are from the executed instruction trace.
 
 Precision errors are the per-configuration maxima from the measured outputs. `semantic_scaled_RMS` uses the precision-specific semantic reference. `ideal_FP64_scaled_RMS` uses the ideal FP64 reference. `absolute_RMS` and `near_zero_absolute_RMS` retain the original absolute-error definitions. The normalization denominator is `max(RMS(reference), 0.01)`. The recorded semantic, ideal BF16 and near-zero thresholds are 1e-4, 0.02 and 1e-6. The validation also contains 22 negative controls, all 22 rejected.
 
