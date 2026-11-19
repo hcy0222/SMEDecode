@@ -1,6 +1,14 @@
 # SMEDecode
 
-SMEDecode performs attention decoding on Arm SME. `bench_aarch64` is the statically linked AArch64 Linux executable for the SMEDecode versus independently reproduced SMEAtten comparison used in the manuscript. The executable is copied from the archived comparison build. See [the manuscript on Overleaf](https://www.overleaf.com/project/6abc585ad54da187b60b59df) (project access required).
+SMEDecode performs attention decoding on Arm SME.
+
+## Executable
+
+`bench_aarch64` is a statically linked AArch64 Linux benchmark executable. It contains two FP32 attention implementations: SMEDecode and an independently reproduced SMEAtten. The comparison uses 32 query heads sharing one KV head, with a head dimension of 128.
+
+The file is the executable from the archived main comparison. It supports that comparison and the four reduced configurations invoked by `smoke_test.py`.
+
+MeAtten, XNNPACK and ACL comparison programs, and the dedicated programs for the other experiments, are not included in this executable. Their reported experimental results are provided in the [results workbook](data/SMEDecode_results.xlsx).
 
 ## Run a functional check
 
@@ -11,6 +19,11 @@ python3 smoke_test.py
 ```
 
 The script requires four available CPU IDs. On Arm64 it runs the executable directly and needs SME/SVE2 with a 512-bit streaming vector length. On other architectures it uses `qemu-aarch64` with SME emulation. The executable generates its inputs and checks both methods against an FP64 reference for four reduced cases. The script uses temporary files for the run. It checks execution and numerical results in a reduced workload. The full performance run requires the original server and its allocation and NUMA binding inputs.
+
+## Test records
+
+- `logs/smoke_test.log` records the four reduced functional checks executed with QEMU in WSL using the published executable and test script.
+- `logs/native_acceptance.md` records execution and numerical acceptance from the original Arm SME comparison experiments.
 
 ## Experimental results
 
