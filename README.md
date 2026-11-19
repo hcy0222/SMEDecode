@@ -105,9 +105,12 @@ The default checks the three precision configurations in the table with one samp
 - `logs/native_acceptance.md` records execution and numerical acceptance from the original Arm SME comparison experiments.
 - `logs/release_checks.log` records packaging, script-entry and runtime-loading checks for this binary suite.
 - `logs/native_test.log` records the November 19, 2026 compute-node test of the published release: four reduced main-comparison configurations, seven computation paths in both counter and trace modes, and 32 precision configurations with one sample each. All numerical checks passed.
+- [Native runtime logs](logs/native_suite/) contain the complete runtime records for the 11 non-ablation experiments in the reduced native suite, including the corrected fused-comparison startup and its completed continuation.
 
 ## Experimental results
 
 The [experimental results](data/README.md) cover the configurations reported in the manuscript. The [results workbook](data/SMEDecode_results.xlsx) contains the performance comparisons, six-configuration ablation, core scaling, instruction counts, representative shapes, key-block sensitivity, precision validation and exponential-function control.
+
+The [native-check results](data/native_checks/) contain the November 19 compute-node measurements, time-reduction percentages, precision errors, instruction counts and scaling controls for the selected configurations.
 
 [Third-party notices](THIRD_PARTY_NOTICES.txt)

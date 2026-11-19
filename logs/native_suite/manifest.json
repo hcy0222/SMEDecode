@@ -1,0 +1,79 @@
+[
+  {
+    "experiment": "smeatten",
+    "files": 904,
+    "original_bytes": 61924481,
+    "archive_bytes": 2945300,
+    "path": "smeatten.zip"
+  },
+  {
+    "experiment": "meatten",
+    "files": 907,
+    "original_bytes": 33415918,
+    "archive_bytes": 1746620,
+    "path": "meatten.zip"
+  },
+  {
+    "experiment": "acl",
+    "files": 6,
+    "original_bytes": 93297,
+    "archive_bytes": 16297,
+    "path": "acl.zip"
+  },
+  {
+    "experiment": "core_scaling",
+    "files": 1488,
+    "original_bytes": 22475551,
+    "archive_bytes": 2138549,
+    "path": "core_scaling.zip"
+  },
+  {
+    "experiment": "key_block",
+    "files": 2704,
+    "original_bytes": 106766258,
+    "archive_bytes": 6130206,
+    "path": "key_block.zip"
+  },
+  {
+    "experiment": "exponential",
+    "files": 1804,
+    "original_bytes": 58124405,
+    "archive_bytes": 3487085,
+    "path": "exponential.zip"
+  },
+  {
+    "experiment": "xnnpack_fused",
+    "files": 911,
+    "original_bytes": 33578274,
+    "archive_bytes": 1795895,
+    "path": "xnnpack_fused.zip"
+  },
+  {
+    "experiment": "xnnpack_nonfused",
+    "files": 908,
+    "original_bytes": 33568009,
+    "archive_bytes": 1803670,
+    "path": "xnnpack_nonfused.zip"
+  },
+  {
+    "experiment": "shapes",
+    "files": 37,
+    "original_bytes": 44158636,
+    "archive_bytes": 393988,
+    "path": "shapes.zip"
+  },
+  {
+    "experiment": "precision",
+    "files": 6,
+    "original_bytes": 29007,
+    "archive_bytes": 7186,
+    "path": "precision.zip"
+  },
+  {
+    "experiment": "instructions",
+    "files": 17,
+    "original_bytes": 24496,
+    "archive_bytes": 9466,
+    "path": "instructions.zip"
+  }
+]

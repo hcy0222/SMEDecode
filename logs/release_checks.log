@@ -85,3 +85,8 @@ Rebuilt 25 measurement front ends; the adopted math and adapter objects were ret
 Default native checks: at most three input configurations per experiment, all six manuscript ablation configurations, one timing sample per method and input, one execution order.
 Preserved the original numerical criteria, input generators and full-workload entry points.
 Verified the AArch64 executable entries and Python command-line interfaces on the login host; no attention computations or compute jobs were used in package preparation.
+
+Fused companion header correction
+The initial reduced companion used an inherited 343-CPU header and exited before attention computation in job 2180267.
+The measurement driver was rebuilt with its original fused-comparison headers and the required 379-CPU definition. The wrong-header compile control was rejected; the corrected program completed all three selected configurations in job 2180412.
+The adopted mathematical and adapter objects were retained.

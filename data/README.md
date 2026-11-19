@@ -2,6 +2,8 @@
 
 [SMEDecode_results.xlsx](SMEDecode_results.xlsx) contains the experimental results reported in the SMEDecode manuscript.
 
+The [native-check results](native_checks/) contain the November 19, 2026 compute-node measurements and time-reduction percentages for the configurations exercised by the release scripts. Their actual job and node identifiers accompany the measurements.
+
 ## Worksheets
 
 | Worksheet | Manuscript location | Data |

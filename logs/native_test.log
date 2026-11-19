@@ -37,3 +37,37 @@ BF16: maximum semantic normalized RMS 3.95747754e-06; maximum ideal-reference no
 
 All three stage processes exited 0.
 Scope: numerical validation for the cases listed above.
+
+Reduced native suite -- November 19, 2026
+Executable revision after the fused header correction: 1af0388bc5a256e9dbfbdfc69bb92ee41e00ef75
+Native runtime archives: logs/native_suite/
+Experimental result tables: data/native_checks/
+
+Runtime logs cover the 11 non-ablation experiments. Each selected method/configuration has one timing sample and one execution order.
+Standard input configurations (L,N,R): (2048,296,1), (6144,296,16), (10240,592,256).
+Core scaling: 37,148,296 workers with L=2048,N=296,R=1.
+Representative shapes (d,Hkv,L,R), N=296: (64,1,2048,1), (128,1,10240,16), (128,8,10240,1).
+Precision: FP32 d128/Hkv1/L2048/R1; BF16 d64/Hkv1/L10240/R16; BF16 d128/Hkv8/L10240/R1. Eight workers process 16 requests.
+Instruction checks: seven paths at L=2048,Hq=32,Hkv=1,d=128; one counter batch of 16 calls and one trace per path.
+
+Job 2180099 -- cn19524 -- 343 CPUs,32768 MiB -- SUCCEEDED,exit 0
+Start UTC 2026-11-19T12:12:57Z; end UTC 2026-11-19T12:35:05Z.
+Completed the standard comparisons, selected core counts, key-block and exponential controls.
+Job 2180267 -- cn19457 -- 379 CPUs,32768 MiB -- initial fused companion startup exit 1
+Start UTC 2026-11-19T12:35:32Z; end UTC 2026-11-19T12:40:13Z.
+The fused baseline completed all three inputs and exited 0. Its companion then rejected the CPU contract before attention computation; its target output directory was not created.
+Job 2180412 -- cn12136 -- 379 CPUs,32768 MiB -- SUCCEEDED,exit 0
+Start UTC 2026-11-19T12:48:08Z; end UTC 2026-11-19T12:51:48Z.
+Completed the corrected fused companion and the non-fused comparison. The completed fused baseline records from job 2180267 were retained.
+Job 2180481 -- cn12136 -- 343 CPUs,98304 MiB -- SUCCEEDED,exit 0
+Start UTC 2026-11-19T12:53:27Z; end UTC 2026-11-19T12:54:56Z.
+Completed all three selected representative shapes and both methods.
+Job 2180503 -- cn12155 -- 9 CPUs,4096 MiB -- SUCCEEDED,exit 0
+Start UTC 2026-11-19T12:55:17Z; end UTC 2026-11-19T12:56:01Z.
+Completed the three precision cases and all seven paths in counter and trace modes.
+
+The scripts verified actual CPU/NUMA placement, 512-bit SVE/SME vector lengths and 4096-byte base pages in the allocated jobs.
+The selected paths completed their original numerical, finite-output, page-placement and complete-call checks.
+Timing records retained their continuous preparation/decoding/total windows and exact call counts.
+Precision cases passed the semantic and ideal-reference criteria. All seven instruction paths passed their FP64 output checks.
+All compute resources were released after the terminal job states.

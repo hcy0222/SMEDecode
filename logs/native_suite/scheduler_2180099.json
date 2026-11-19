@@ -1,0 +1,171 @@
+{
+  "jobId": "2180099",
+  "jobName": "default",
+  "description": "",
+  "priority": 1,
+  "exclusive": false,
+  "interactionMode": "DEFAULT",
+  "state": "SUCCEEDED",
+  "currentOperation": "EMPTY",
+  "createTime": "2026-11-19T12:12:54Z",
+  "startTime": "2026-11-19T12:12:57Z",
+  "lastModifiedTime": "-",
+  "endTime": "2026-11-19T12:35:05Z",
+  "queue": "q_hpcapp",
+  "account": "common",
+  "reserveRes": "-",
+  "backfillRes": "-",
+  "backfilledRes": "-",
+  "startTimeEstimated": "-",
+  "jobType": "COSCHED",
+  "mpiType": "DEFAULT",
+  "assistJob": "DEFAULT",
+  "pmiType": "OTHER",
+  "scheduledTime": "-",
+  "jobWallClockLimit": 0,
+  "retryPolicy": {
+    "maxRetryCnt": 0,
+    "currentRetryTimes": 0
+  },
+  "user": "nsls_ch",
+  "execPath": "/home/share/nsls_ch/hcysme/smedecode_reduced_suite_20261119_A01",
+  "submitNode": "login03",
+  "depInfo": {
+    "depJobList": [],
+    "children": []
+  },
+  "traceMessages": [
+    "2026-11-19T12:12:54Z   :    [JOB_ADD] Job 2180099 is submitted by nsls_ch, job state is PENDING.",
+    "2026-11-19T12:12:56Z   :    [JOB_START] Job 2180099 start message has been sent.",
+    "2026-11-19T12:12:56Z   :    [JOB_START_ACK] Job 2180099 start message has been received by agent cn19524.",
+    "2026-11-19T12:12:57Z   :    [JOB_EXECUTION] Job 2180099 state is from PENDING to RUNNING.",
+    "2026-11-19T12:12:57Z   :    [HOST_PRE-HOOK_START] Job 2180099 host-pre-hook started at 2026-11-19T12:12:57Z.",
+    "2026-11-19T12:13:08Z   :    [HOST_PRE-HOOK_END] Job 2180099 host-pre-hook is finished successfully at 2026-11-19T12:13:08Z, cost time: 11043 ms.",
+    "2026-11-19T12:35:05Z   :    [JOB_FINISH] Job 2180099 state is from RUNNING to SUCCEEDED."
+  ],
+  "resGroups": [
+    {
+      "taskGroupName": "rg0",
+      "minReplica": 1,
+      "replica": 1,
+      "preferNodes": "cn19524",
+      "nodeSelectPolicyReq": "-",
+      "nodeSelectPolicyEff": "SEQUENCE",
+      "affinityRequest": [
+        "core[count=343]"
+      ],
+      "taskLabels": "queue_q_hpcapp aarch64",
+      "resReq": {
+        "cpu": 343,
+        "mem": 32768,
+        "gpu": {
+          "amount": 0,
+          "type": "gpu"
+        },
+        "npu": {
+          "count": 0,
+          "name": "npu"
+        },
+        "license": {}
+      },
+      "resAlloc": {
+        "cpu": 343,
+        "mem": 32768,
+        "gpu": {
+          "amount": 0,
+          "type": "gpu"
+        },
+        "npu": {
+          "count": 0,
+          "name": "npu"
+        },
+        "license": {}
+      },
+      "nodeResUsages": [
+        {
+          "tPreCheckRunTime": 0,
+          "execNode": "cn19524",
+          "resIndex": "0/1",
+          "userCpuTime": 78741,
+          "systemCpuTime": 53320,
+          "memswMax": 17475,
+          "memMax": 17475,
+          "memAvg": 3648,
+          "memReal": 0,
+          "rss": 0,
+          "cache": 2090,
+          "preHookRunTime": 0,
+          "postHookRunTime": 0,
+          "hostPreHookRunTime": 11,
+          "hostPostHookRunTime": 0,
+          "swap": 0,
+          "swapMax": 0,
+          "wallclockDuration": 1316,
+          "sstoppedTime": 0,
+          "cpuUtilAvg": 10026,
+          "cpuUtilRecent": 0,
+          "gpuUtilAvg": [],
+          "gpuUtilRecent": [],
+          "npuUtilRecent": [],
+          "pids": "-",
+          "hwThreads": "0-36,38-74,76-112,114-150,152-188,190-226,228-264,266-302,304-340,342-351",
+          "gpuIds": "-",
+          "npuIds": "-"
+        }
+      ]
+    }
+  ],
+  "adminPriority": -1,
+  "taskExecNodes": "cn19524",
+  "taskExecNodesCount": 1,
+  "totalResUsage": {
+    "userCpuTimeTotal": 78741,
+    "systemCpuTimeTotal": 53320,
+    "memswMaxTotal": 13075,
+    "memMaxTotal": 13075,
+    "wallclockDurationTotal": 1316,
+    "sstoppedTimeTotal": 0,
+    "preHookRunTime": 0,
+    "postHookRunTime": 0,
+    "hostPreHookRunTime": 11,
+    "hostPostHookRunTime": 0,
+    "coreHours": 451388
+  },
+  "jobResReq": {
+    "license": {}
+  },
+  "jobResAlloc": {
+    "license": {}
+  },
+  "transferInfo": {
+    "transferType": "LOCAL",
+    "forwardTime": "-",
+    "recallTime": "-"
+  },
+  "logRedirectPath": {
+    "stderrRedirectPath": "/home/share/nsls_ch/hcysme/smedecode_reduced_suite_20261119_A01/01_standard.stderr",
+    "stdoutRedirectPath": "/home/share/nsls_ch/hcysme/smedecode_reduced_suite_20261119_A01/01_standard.stdout",
+    "stderrRedirectType": "override",
+    "stdoutRedirectType": "override"
+  },
+  "cmd": "/bin/bash /home/share/nsls_ch/hcysme/smedecode_reduced_suite_20261119_A01/run_group.sh 01_standard",
+  "preHook": {},
+  "postHook": {},
+  "hostPreHook": {
+    "cmd": "/home/share/software/donau/hook/hosthook/no_exclusive/hostPreHook.sh",
+    "maxRetryCnt": 0,
+    "hookWallClockLimit": 300
+  },
+  "hostPostHook": {},
+  "exitCode": 0,
+  "exitMessage": "Job execution succeeded",
+  "jobExitCode": 0,
+  "isX11ForwardEnabled": false,
+  "logRedirectOutputPath": {
+    "stderrRedirectOutputPath": "/home/share/nsls_ch/hcysme/smedecode_reduced_suite_20261119_A01/01_standard.stderr",
+    "stdoutRedirectOutputPath": "/home/share/nsls_ch/hcysme/smedecode_reduced_suite_20261119_A01/01_standard.stdout"
+  },
+  "isAutoResizable": false,
+  "resizeNotifyCmd": "",
+  "hasResourceAffinityReq": false
+}
