@@ -89,7 +89,8 @@ python3 test_precision.py --samples 1 --output /path/to/new-precision-checks
 
 - `logs/smoke_test.log` records the four reduced functional checks executed with QEMU in WSL using the published executable and test script.
 - `logs/native_acceptance.md` records execution and numerical acceptance from the original Arm SME comparison experiments.
-- `logs/release_checks.log` records packaging, script-entry and runtime-loading checks for this binary suite. New compute-node execution is recorded separately after it is performed.
+- `logs/release_checks.log` records packaging, script-entry and runtime-loading checks for this binary suite.
+- `logs/native_test.log` records the November 19, 2026 compute-node test of the published release: four reduced main-comparison configurations, seven computation paths in both counter and trace modes, and 32 precision configurations with one sample each. All numerical checks passed.
 
 ## Experimental results
 
