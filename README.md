@@ -1,7 +1,5 @@
 # SMEDecode
 
-[中文说明](README.zh-CN.md)
-
 SMEDecode performs attention decoding on Arm SME. `bench_aarch64` is the statically linked AArch64 Linux executable for the SMEDecode versus independently reproduced SMEAtten comparison used in the manuscript. The executable is copied from the archived comparison build. See [the manuscript on Overleaf](https://www.overleaf.com/project/6abc585ad54da187b60b59df) (project access required).
 
 ## Run a functional check
