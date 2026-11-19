@@ -79,3 +79,9 @@ Topology-label clarification
 The scheduler-topology fixture above is not a compute-node Linux NUMA observation.
 Job 2179526 on cn19524 observed Linux CPU-to-NUMA membership from sysfs: CPUs 0,38,76,114,152,190,228,266 belong to nodes 0,1,2,3,4,5,6,7 respectively.
 The revised launchers use the observed Linux mapping for actual execution.
+
+2026-11-19 reduced native-check preparation
+Rebuilt 25 measurement front ends; the adopted math and adapter objects were retained.
+Default native checks: at most three input configurations per experiment, all six manuscript ablation configurations, one timing sample per method and input, one execution order.
+Preserved the original numerical criteria, input generators and full-workload entry points.
+Verified the AArch64 executable entries and Python command-line interfaces on the login host; no attention computations or compute jobs were used in package preparation.

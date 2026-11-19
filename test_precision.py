@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check the 32 FP32/BF16 configurations using eight workers and 16 requests."""
+"""Check three FP32/BF16 cases; use --formal for all manuscript configurations."""
 import argparse
 from array import array
 import ctypes as C
@@ -70,9 +70,15 @@ def error(got, reference):
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--output', type=Path, required=True, help='new directory outside the repository')
-    ap.add_argument('--samples', type=int, choices=(1, 8), default=8,
+    ap.add_argument('--formal', action='store_true', help='run all 32 manuscript configurations')
+    ap.add_argument('--samples', type=int, choices=(1, 8),
                     help='one sample for numerical acceptance, eight for the measurement workload')
     args = ap.parse_args()
+    if args.samples is None:
+        args.samples = 8 if args.formal else 1
+    if not args.formal and args.samples != 1:
+        ap.error('The reduced check uses one sample; --formal selects the full workload')
+    selected = {(128, 1, 2048, 0, 1), (64, 1, 10240, 2, 16), (128, 8, 10240, 2, 1)}
     job, cpus = native_environment()
     if len(cpus) != 9 or len({cpu_node(c) for c in cpus}) != 1:
         ap.error('Allocate nine CPUs in one NUMA domain')
@@ -82,16 +88,21 @@ def main():
     out.mkdir(parents=True, exist_ok=False)
     os.sched_setaffinity(0, {cpus[-1]})
     record = dict(job=job, cpus=cpus, samples=args.samples,
+                  scope='formal' if args.formal else 'reduced_check',
                   started=dt.datetime.now(dt.timezone.utc).isoformat(), cases=[])
     for dim in (64, 128):
         for groups in (1, 8):
             for length in (2048, 10240):
+                if not args.formal and not any(t[:3] == (dim, groups, length) for t in selected):
+                    continue
                 scenario = out/('d%d_g%d_L%d' % (dim, groups, length))
                 scenario.mkdir()
                 team = Team(dim, cpus[:8], cpu_node(cpus[0]))
                 check(team.lib.group_init(team.handle, length, 256, groups, 0, 0x13579bdf, 0), 'input generation')
                 team.dispatch(4)
                 for impl in (0, 2):
+                    if not args.formal and not any(t[:4] == (dim, groups, length, impl) for t in selected):
+                        continue
                     check(team.lib.group_implementation(team.handle, impl), 'precision selection')
                     team.dispatch(5)
                     refs = scenario/('references_i%d' % impl)
@@ -99,6 +110,8 @@ def main():
                     references = [(values(refs/('r%02d_semantic.f64' % r), 'd', 32*dim),
                                    values(refs/('r%02d_ideal.f64' % r), 'd', 32*dim)) for r in range(16)]
                     for repeats in (1, 16):
+                        if not args.formal and (dim, groups, length, impl, repeats) not in selected:
+                            continue
                         row = dict(d=dim, Hkv=groups, L=length, R=repeats,
                                    precision='FP32' if impl == 0 else 'BF16',
                                    semantic_scaled_rms=0.0, ideal_scaled_rms=0.0, samples=[])
@@ -124,7 +137,7 @@ def main():
                         print(json.dumps({k: v for k, v in row.items() if k != 'samples'}), flush=True)
                 team.dispatch(8)
                 check(team.lib.group_close(team.handle), 'worker join')
-    if len(record['cases']) != 32:
+    if len(record['cases']) != (32 if args.formal else 3):
         raise RuntimeError('Incomplete precision configuration coverage')
     record.update(status='numerical_checks_passed', completed=dt.datetime.now(dt.timezone.utc).isoformat())
     (out/'test_record.json').write_text(json.dumps(record, indent=2)+'\n')

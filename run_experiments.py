@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run the published experiment binaries on the paper's Arm SME platform."""
+"""Check the published binaries on Arm SME; use --formal for manuscript workloads."""
 import argparse
 import ctypes
 import datetime as dt
@@ -72,6 +72,7 @@ def main():
     ap.add_argument('experiment', choices=EXPERIMENTS)
     ap.add_argument('--output', type=Path, required=True, help='new output directory outside the repository')
     ap.add_argument('--round', type=int, choices=(1, 2), default=1)
+    ap.add_argument('--formal', action='store_true', help='run the full manuscript workload instead of the reduced one-sample check')
     ap.add_argument('--process', type=int, choices=(0, 1))
     ap.add_argument('--workers', type=int, choices=(37, 74, 148, 296), default=296,
                     help='worker count for core scaling')
@@ -105,6 +106,7 @@ def main():
     if args.kml_lib:
         env['LD_LIBRARY_PATH'] = str(args.kml_lib.resolve())+':'+env.get('LD_LIBRARY_PATH', '')
     metadata = dict(experiment=args.experiment, job=job, host=platform.node(),
+                    scope='formal' if args.formal else 'reduced_check',
                     cpus=cpus, started=dt.datetime.now(dt.timezone.utc).isoformat(), commands=[])
 
     def run(label, command, existing=False):
@@ -138,7 +140,8 @@ def main():
                 command = ['numactl', '--physcpubind=%d' % cpu, '--membind=%d' % node]
                 if mode == 'trace':
                     command.append(ROOT/'bin/instructions_trace')
-                command += [ROOT/('bin/instructions_'+binary), method, node, mode]
+                probe_mode = 'check_counter' if mode == 'counter' and not args.formal else mode
+                command += [ROOT/('bin/instructions_'+binary), method, node, probe_mode]
                 run('%s_%d_%s' % (binary, method, mode), command)
     else:
         expected = 379 if args.experiment.startswith('xnnpack-') else 343
@@ -155,9 +158,10 @@ def main():
                             (job, platform.node(), len(cpus), control)+
                             ''.join('%d %d\n' % row for row in workers))
             for dim, groups in ((64, 1), (128, 1), (128, 8)):
-                run('d%d_g%d' % (dim, groups), [ROOT/('bin/shapes_d%d' % dim), groups, path, '{output}', process])
+                command = [ROOT/('bin/shapes_d%d' % dim), groups, path, '{output}', process]
+                run('d%d_g%d' % (dim, groups), command+([] if args.formal else ['check']))
         elif args.experiment == 'acl':
-            run('acl', [ROOT/'bin/acl', args.round, process+1, '{output}'], existing=True)
+            run('acl', [ROOT/'bin/acl', args.round, process+1, '{output}']+([] if args.formal else ['check']), existing=True)
         else:
             magic, field, identity = 'FC_PROFILE_V1', 'profile_sha256', '1'*64
             counterparts = {
@@ -168,7 +172,7 @@ def main():
                 magic, identity, counterpart = counterparts[args.experiment]
                 field = 'mapping_identity'
                 baseline = args.experiment.replace('-', '_')
-                run(baseline, [ROOT/('bin/'+baseline), args.round, '{output}'], existing=True)
+                run(baseline, [ROOT/('bin/'+baseline), args.round, '{output}']+([] if args.formal else ['check']), existing=True)
                 binaries = [('smedecode', ROOT/('bin/'+counterpart))]
             elif args.experiment == 'ablation':
                 binaries = [(arm, ROOT/('bin/ablation_'+arm)) for arm in ('base', 'k', 'kv', 'full')]
@@ -191,7 +195,7 @@ def main():
             path = out/'binding.txt'
             binding(path, job, cpus, workers, control, magic, field, identity)
             for label, binary in binaries:
-                command = [binary, 'native', path, identity, '{output}', process, 'formal']
+                command = [binary, 'native', path, identity, '{output}', process, 'formal' if args.formal else 'check']
                 if args.experiment == 'scaling':
                     command.append(10240 if args.spread else 0)
                 run(label, command)

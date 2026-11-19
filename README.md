@@ -6,7 +6,7 @@ SMEDecode performs attention decoding on Arm SME.
 
 `bench_aarch64` is a statically linked AArch64 Linux benchmark executable. It contains two FP32 attention implementations: SMEDecode and an independently reproduced SMEAtten. The comparison uses 32 query heads sharing one KV head, with a head dimension of 128.
 
-The file is the executable from the archived main comparison. It supports that comparison and the four reduced configurations invoked by `smoke_test.py`. Dedicated programs for the other manuscript experiments are provided in `bin/`.
+The executable retains the main-comparison implementations and provides a native check mode. It also supports the four small configurations invoked by `smoke_test.py`. Dedicated programs for the other manuscript experiments are provided in `bin/`.
 
 | Files | Experiment |
 |---|---|
@@ -43,7 +43,19 @@ The script requires four available CPU IDs. On Arm64 it runs the executable dire
 
 ## Run manuscript experiments
 
-`run_experiments.py` prepares the binding inputs and invokes the selected experiment binaries. `test_precision.py` invokes the precision libraries, checks all 32 configurations against FP64 references, and retains its outputs and measurements in the specified directory. Both scripts use the Python standard library.
+`run_experiments.py` prepares the binding inputs and invokes the selected experiment binaries. By default it runs a reduced native check with one timing sample per method and configuration. `test_precision.py` checks three selected FP32/BF16 configurations against FP64 references, also with one timing sample. Both scripts use the Python standard library and retain outputs in the specified directory.
+
+| Default native check | Configurations |
+|---|---|
+| Performance comparisons and key-block sensitivity | (L,N,R) = (2048,296,1), (6144,296,16), (10240,592,256) |
+| Cumulative ablation | L=10240, N=296/592, R=1/16/256; all six configurations, four states |
+| Representative shapes | (d,Hkv,L,R) = (64,1,2048,1), (128,1,10240,16), (128,8,10240,1); N=296 |
+| Core scaling | L=2048, N=296, R=1 at the selected worker count |
+| Exponential-function control | L=2048/10240, N=296, R=256 |
+| Precision | (precision,d,Hkv,L,R) = (FP32,128,1,2048,1), (BF16,64,1,10240,16), (BF16,128,8,10240,1); 16 requests |
+| Instruction measurements | One L=2048 input, seven paths; one counter batch and one trace per path |
+
+Add `--formal` to either script to run its full manuscript workload and retained sample counts. A reduced check completes one execution order; numerical checks and warm-up calls remain outside the timing sample.
 
 Run native experiments from the repository root inside a compute-node allocation on the paper's Arm SME server. The programs require SVE/SVE2 and SME with 512-bit vector lengths, 4096-byte base pages, eight allocated NUMA domains with 37 worker CPUs each for the 296-worker experiments, and sufficient memory for the selected workload. BF16 precision tests additionally require the corresponding BF16 instructions. The scheduler provides `CCS_JOB_ID`.
 
@@ -63,7 +75,7 @@ For example, run the six-configuration ablation in a 343-CPU allocation:
 python3 run_experiments.py ablation --output /path/to/new-ablation-results
 ```
 
-Choose another experiment using the names listed by `python3 run_experiments.py --help`. `--round 1` and `--round 2` select the corresponding order in the retained comparison drivers; `--process 0` or `--process 1` can select a process order explicitly. Each invocation uses a new output directory outside this repository and stops if a program fails.
+Choose another experiment using the names listed by `python3 run_experiments.py --help`. Each invocation uses a new output directory outside this repository and stops if a program fails. The default is one execution order. `--round` and `--process` select an order in the corresponding retained drivers when an explicit order is needed.
 
 Before core scaling, generate its scalar references on the AArch64 login host:
 
@@ -85,7 +97,7 @@ Run precision checks in a nine-CPU allocation:
 python3 test_precision.py --samples 1 --output /path/to/new-precision-checks
 ```
 
-`--samples 1` checks numerical acceptance. `--samples 8` runs eight measurements for each of the 32 configurations. Numerical checks use the manuscript's semantic error criterion, including its near-zero rule, and the BF16 comparison with the ideal FP32 reference.
+The default checks the three precision configurations in the table with one sample each. `--formal --samples 8` runs eight measurements for each of the 32 manuscript configurations. Numerical checks use the manuscript's semantic error criterion, including its near-zero rule, and the BF16 comparison with the ideal FP32 reference.
 
 ## Test records
 
