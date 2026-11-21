@@ -108,10 +108,6 @@ The default checks the three precision configurations in the table with one samp
 
 ## Experimental results
 
-Result files contain final per-configuration results. Experiments with one independent measurement retain that measurement; experiments with repeated measurements retain their final aggregates.
-
-The [six-configuration ablation results](data/six_configuration_ablation.csv) contain the aggregate results from two independent measurements, with L=10240, N=296/592 and R=1/16/256.
-
 The [data guide](data/README.md) describes the experimental result files. The [results workbook](data/SMEDecode_results.xlsx) contains the manuscript's performance comparisons, ablation, core scaling, instruction counts, representative shapes, key-block sensitivity, precision validation and exponential-function control.
 
 The [native-check results](data/native_checks/) contain the November 19 compute-node measurements, time-reduction percentages, precision errors, instruction counts and scaling controls for the selected configurations.
