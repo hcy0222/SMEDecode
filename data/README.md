@@ -1,70 +1,42 @@
-# SMEDecode experimental results
+# Experimental results
 
-Result files contain final per-configuration results. A single independent measurement is retained as recorded; repeated measurements are represented by their final aggregate. Per-process logs and per-sample raw archives are not included in this data collection.
+This directory contains SMEDecode experimental results in CSV and Excel format.
 
-## Six-configuration ablation results
+## Result files
 
-[six_configuration_ablation.csv](six_configuration_ablation.csv) contains the aggregate results from two independent measurements on November 20-21, 2026. The six configurations use L=10240, N=296 or 592, and R=1, 16 or 256. The measurements use FP32, 32 query heads, one KV head, a head dimension of 128 and 296 workers, with an exclusive 343-CPU allocation.
+| File | Contents |
+|---|---|
+| [six_configuration_ablation.csv](six_configuration_ablation.csv) | Ablation results: total execution time for Base, K, KV and Full, together with percentage results. |
+| [SMEDecode_results.xlsx](SMEDecode_results.xlsx) | Experimental results reported in the manuscript. |
+| [native_checks/](native_checks/) | Runtime-check results for execution time, numerical accuracy, instruction counts and execution controls. |
 
-Each row contains the continuous total times for the four implementation states, `Base`, `K`, `KV` and `Full`, together with the three percentage results. The time columns use milliseconds. Percentage fields store percent values: for example, `4.61` means `4.61%`. Times are aggregated by taking process medians and then the equal arithmetic mean of the two independent measurements.
+## Workbook contents
 
-## Manuscript workbook
-
-[SMEDecode_results.xlsx](SMEDecode_results.xlsx) contains the experimental results reported in the SMEDecode manuscript.
-
-The [native-check results](native_checks/) contain the November 19, 2026 compute-node measurements and time-reduction percentages for the configurations exercised by the release scripts. Their actual job and node identifiers accompany the measurements.
-
-## Worksheets
-
-| Worksheet | Manuscript location | Data |
-|---|---|---|
-| `Baseline_Comparison` | Figure 6 and performance comparison | Five baseline groups with 18 configurations each: MeAtten, XNNPACK fused, XNNPACK nonfused, ACL with 256-key blocks, and SMEAtten. Each record includes its contemporaneous SMEDecode measurements. |
-| `Cumulative_Ablation` | Figure 7, Table 4 and ablation text | Six configurations: L = 10240, N = 296 or 592, and R = 1, 16 or 256. Each configuration has four implementation states. |
-| `Core_Scaling` | Figure 8 and core-scaling text | SMEDecode and SMEAtten at 37, 74, 148 and 296 workers; L = 2048 or 10240; R = 1 or 256; N = 296. |
-| `Scaling_Controls` | Core-scaling text | Register computation, owner-local K/V reads, decoding with the reported NUMA placements, and dispatch with owner scanning. |
-| `Instruction_Counts` | Table 3 | FP32 FMOPA and retired instruction counts for the seven reported implementation paths. |
-| `Representative_Shapes` | Table 5 and representative-shape text | The 12 reported head-dimension and KV-group configurations, with paired SMEDecode and SMEAtten measurements. |
-| `Key_Block_Sensitivity` | Experimental setup | The 18 configurations and the 16-, 32- and 256-key SMEAtten blocks. |
-| `Precision_Validation` | Precision and shape validation | The 32 reported FP32 and BF16 correctness configurations and their measured errors. |
-| `Exponent_Control` | Performance-comparison text | Original and common exponential functions at L = 2048 or 10240, N = 296 and R = 256. |
+| Worksheet | Results |
+|---|---|
+| `Baseline_Comparison` | SMEDecode comparisons with MeAtten, fused and non-fused XNNPACK, ACL and SMEAtten. |
+| `Cumulative_Ablation` | Execution time and throughput for the ablation implementation states. |
+| `Core_Scaling` | SMEDecode and SMEAtten results at different worker counts. |
+| `Scaling_Controls` | Register computation, local K/V reads, NUMA placement and dispatch controls. |
+| `Instruction_Counts` | FP32 FMOPA and retired instruction counts. |
+| `Representative_Shapes` | SMEDecode and SMEAtten results for different head dimensions and KV groups. |
+| `Key_Block_Sensitivity` | SMEAtten results for different key-block sizes. |
+| `Precision_Validation` | FP32 and BF16 numerical errors and acceptance results. |
+| `Exponent_Control` | Results for the original and common exponential functions. |
 
 ## Fields and units
 
-`L` is the number of keys. `N` is the task count. `R` is the number of decoding calls after each preparation. `Hq` and `Hkv` are the query-head and KV-head counts. `d` is the head dimension. `workers` is the number of worker threads.
+`L` is the key count, `N` the task count and `R` the decoding calls after data preparation. `Hq` and `Hkv` are the query-head and KV-head counts. `d` is the head dimension, and `workers` is the worker count.
 
-Times are in milliseconds. `C_ms` is data preparation, `D_ms` is accumulated complete decoding over the specified calls, and `T_ms` is continuous total execution time. The corresponding prefixed fields identify SMEDecode and its paired baseline. The total is measured in a continuous window, and each stage retains its own statistic.
+| Field | Meaning | Unit |
+|---|---|---|
+| `C_ms` | Data preparation time | ms |
+| `D_ms` | Accumulated decoding time | ms |
+| `T_ms` | Continuous total execution time | ms |
+| `GFLOP_s` | Floating-point throughput | GFLOP/s |
 
-Throughput is in GFLOP/s. It is calculated as:
+Prefixes identify the implementation associated with a field. Total execution time is measured over a continuous interval.
 
-```text
-GFLOP/s = 4 * N * R * Hq * L * d / (T_ms * 1,000,000)
-```
+Percentage fields in the ablation CSV store percent values: `4.61` means `4.61%`. Percentage-formatted cells in the workbook store ratios.
 
-`T_speedup` is paired baseline total time divided by SMEDecode total time. `T_speedup_vs_37` is total time at 37 workers divided by total time at the row's worker count, for the same method and configuration.
-
-In the workbook, reduction, change and relative-time columns store numeric ratios and use percentage display formatting:
-
-```text
-time reduction = 1 - new time / reference time
-throughput increase = new throughput / reference throughput - 1
-relative key-block time = block total time / 16-key total time
-key-block time change = relative key-block time - 1
-```
-
-Blank cells denote fields that do not apply to that record. Numeric precision is retained in the cells; the manuscript displays rounded values.
-
-## Calculation methods
-
-For the MeAtten, SMEAtten, XNNPACK and representative-shape comparisons, process-level timing samples use the median. Statistics across execution orders and independent measurements use the original geometric means. XNNPACK's fused and nonfused paths each have their own paired SMEDecode measurements.
-
-ACL absolute times use paired arithmetic means. Its reduction columns retain the paired log-ratio statistic. `T_speedup` is the ratio of the displayed absolute-time statistics. The reduction columns and absolute-time columns retain their respective calculation methods.
-
-The ablation worksheet uses the arithmetic mean of process medians with equal weighting of independent measurements. Its four implementation-state labels are `Base`, `K_layout`, `K_V_layout` and `Full`.
-
-Core scaling uses the geometric mean of the ordinary timing statistics. Scaling-control times and register-compute throughput use the reported geometric means. `NUMA_domains` lists the domains used by that record. `reference_D_ms` and `time_over_reference` identify the matching standard-placement or ordinary-decoding reference.
-
-Key-block sensitivity retains the original geometric means of timing statistics and ratios. Instruction counts report one complete prepared decoding call. Retired instructions use the median of three batches, after empty-window correction, with the manuscript's integer rounding also provided. FP32 FMOPA counts are from the executed instruction trace.
-
-Precision errors are the per-configuration maxima from the measured outputs. `semantic_scaled_RMS` uses the precision-specific semantic reference. `ideal_FP64_scaled_RMS` uses the ideal FP64 reference. `absolute_RMS` and `near_zero_absolute_RMS` retain the original absolute-error definitions. The normalization denominator is `max(RMS(reference), 0.01)`. The recorded semantic, ideal BF16 and near-zero thresholds are 1e-4, 0.02 and 1e-6. The validation also contains 22 negative controls, all 22 rejected.
-
-The exponential-function sheet retains the paired original and common-function measurements. The function-change columns compare common-function decoding time with the matching original-function time.
+The precision fields contain semantic, ideal-reference, absolute and near-zero numerical errors. Blank cells denote fields that do not apply to the record.
