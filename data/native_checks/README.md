@@ -19,4 +19,4 @@ The [six-configuration ablation results](../six_configuration_ablation.csv) prov
 
 The fused XNNPACK baseline was recorded in job 2180267 on cn19457. Its SMEDecode companion was recorded after the benchmark-header correction in job 2180412 on cn12136. Their measurement sources remain separate in the tables.
 
-The [runtime logs](../../logs/native_suite/) accompany the non-ablation experiments. The [manuscript workbook](../SMEDecode_results.xlsx) retains the results reported in the paper.
+These tables retain the results of the single-measurement checks. The [manuscript workbook](../SMEDecode_results.xlsx) retains the final results reported in the paper.

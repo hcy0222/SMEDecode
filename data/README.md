@@ -1,5 +1,7 @@
 # SMEDecode experimental results
 
+Result files contain final per-configuration results. A single independent measurement is retained as recorded; repeated measurements are represented by their final aggregate. Per-process logs and per-sample raw archives are not included in this data collection.
+
 ## Six-configuration ablation results
 
 [six_configuration_ablation.csv](six_configuration_ablation.csv) contains the aggregate results from two independent measurements on November 20-21, 2026. The six configurations use L=10240, N=296 or 592, and R=1, 16 or 256. The measurements use FP32, 32 query heads, one KV head, a head dimension of 128 and 296 workers, with an exclusive 343-CPU allocation.
