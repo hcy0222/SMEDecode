@@ -1,5 +1,13 @@
 # SMEDecode experimental results
 
+## Six-configuration ablation results
+
+[six_configuration_ablation.csv](six_configuration_ablation.csv) contains the aggregate results from two independent measurements on November 20-21, 2026. The six configurations use L=10240, N=296 or 592, and R=1, 16 or 256. The measurements use FP32, 32 query heads, one KV head, a head dimension of 128 and 296 workers, with an exclusive 343-CPU allocation.
+
+Each row contains the continuous total times for the four implementation states, `Base`, `K`, `KV` and `Full`, together with the three percentage results. The time columns use milliseconds. Percentage fields store percent values: for example, `4.61` means `4.61%`. Times are aggregated by taking process medians and then the equal arithmetic mean of the two independent measurements.
+
+## Manuscript workbook
+
 [SMEDecode_results.xlsx](SMEDecode_results.xlsx) contains the experimental results reported in the SMEDecode manuscript.
 
 The [native-check results](native_checks/) contain the November 19, 2026 compute-node measurements and time-reduction percentages for the configurations exercised by the release scripts. Their actual job and node identifiers accompany the measurements.
@@ -32,7 +40,7 @@ GFLOP/s = 4 * N * R * Hq * L * d / (T_ms * 1,000,000)
 
 `T_speedup` is paired baseline total time divided by SMEDecode total time. `T_speedup_vs_37` is total time at 37 workers divided by total time at the row's worker count, for the same method and configuration.
 
-Reduction, change and relative-time columns store numeric ratios and use percentage display formatting:
+In the workbook, reduction, change and relative-time columns store numeric ratios and use percentage display formatting:
 
 ```text
 time reduction = 1 - new time / reference time
@@ -49,7 +57,7 @@ For the MeAtten, SMEAtten, XNNPACK and representative-shape comparisons, process
 
 ACL absolute times use paired arithmetic means. Its reduction columns retain the paired log-ratio statistic. `T_speedup` is the ratio of the displayed absolute-time statistics. The reduction columns and absolute-time columns retain their respective calculation methods.
 
-Cumulative ablation uses the arithmetic mean of process medians with equal weighting of independent measurements. Throughput and step changes are calculated from those times. The states are `Base`, `K_layout`, `K_V_layout` and `Full`. They represent the base implementation, the key-segment layout, the additional V grouping, and the complete implementation with domain-based preparation and per-worker notification.
+The ablation worksheet uses the arithmetic mean of process medians with equal weighting of independent measurements. Its four implementation-state labels are `Base`, `K_layout`, `K_V_layout` and `Full`.
 
 Core scaling uses the geometric mean of the ordinary timing statistics. Scaling-control times and register-compute throughput use the reported geometric means. `NUMA_domains` lists the domains used by that record. `reference_D_ms` and `time_over_reference` identify the matching standard-placement or ordinary-decoding reference.
 

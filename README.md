@@ -15,7 +15,7 @@ The executable retains the main-comparison implementations and provides a native
 | `bin/xnnpack_fused`, `bin/smedecode_xnnpack_fused` | Fused XNNPACK comparison |
 | `bin/xnnpack_nonfused`, `bin/smedecode_xnnpack_nonfused` | Non-fused XNNPACK comparison |
 | `bin/acl` | SMEDecode and the blocked/full-matrix ACL paths |
-| `bin/ablation_base`, `bin/ablation_k`, `bin/ablation_kv`, `bin/ablation_full` | Four cumulative ablation states; six configurations: L=10240, N=296/592, R=1/16/256 |
+| `bin/ablation_base`, `bin/ablation_k`, `bin/ablation_kv`, `bin/ablation_full` | Six-configuration ablation: Base, K, KV and Full; L=10240, N=296/592, R=1/16/256 |
 | `bin/core_scaling` | Core scaling and the compute, read, dispatch and NUMA-placement controls |
 | `bin/scaling_reference` | Scalar FP64 reference generation for core scaling |
 | `bin/shapes_d64`, `bin/shapes_d128` | The 12 representative shapes |
@@ -48,7 +48,7 @@ The script requires four available CPU IDs. On Arm64 it runs the executable dire
 | Default native check | Configurations |
 |---|---|
 | Performance comparisons and key-block sensitivity | (L,N,R) = (2048,296,1), (6144,296,16), (10240,592,256) |
-| Cumulative ablation | L=10240, N=296/592, R=1/16/256; all six configurations, four states |
+| Six-configuration ablation | L=10240, N=296/592, R=1/16/256; all six configurations, four states |
 | Representative shapes | (d,Hkv,L,R) = (64,1,2048,1), (128,1,10240,16), (128,8,10240,1); N=296 |
 | Core scaling | L=2048, N=296, R=1 at the selected worker count |
 | Exponential-function control | L=2048/10240, N=296, R=256 |
@@ -109,7 +109,9 @@ The default checks the three precision configurations in the table with one samp
 
 ## Experimental results
 
-The [experimental results](data/README.md) cover the configurations reported in the manuscript. The [results workbook](data/SMEDecode_results.xlsx) contains the performance comparisons, six-configuration ablation, core scaling, instruction counts, representative shapes, key-block sensitivity, precision validation and exponential-function control.
+The [six-configuration ablation results](data/six_configuration_ablation.csv) contain the aggregate results from two independent measurements, with L=10240, N=296/592 and R=1/16/256.
+
+The [data guide](data/README.md) describes the experimental result files. The [results workbook](data/SMEDecode_results.xlsx) contains the manuscript's performance comparisons, ablation, core scaling, instruction counts, representative shapes, key-block sensitivity, precision validation and exponential-function control.
 
 The [native-check results](data/native_checks/) contain the November 19 compute-node measurements, time-reduction percentages, precision errors, instruction counts and scaling controls for the selected configurations.
 
